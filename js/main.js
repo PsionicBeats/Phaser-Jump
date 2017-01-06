@@ -15,7 +15,18 @@
   };
 
   const create = _ => {
+  	// Set up game physics via ARCADE mode (Able to use Phaser by setting it in the "iffy." Uses CFG.)
+  	game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.physics.arcade.gravity.y = CFG.GRAVITY;
+    game.stage.backgroundColor = CFG.BG_COLOR;
+    // Listen to keyboard movemnet
+    Game.cursors = game.input.keyboard.createCursorKeys();
+    
+    Game.platformsGroup = game.add.group();
+    Game.LevelDesigner.load(game, 1);
 
+    Game.hero = new Game.Hero(game, 500, CFG.GAME_HEIGHT - 200);
+    game.camera.follow(hero.sprite, null, CFG.CAMERA_LERP, CFG.CAMERA_LERP);
   };
 
   const update = _ => {
