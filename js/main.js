@@ -1,7 +1,17 @@
+// Note: Stuff below is newer syntax
 (( Phaser, Game, CFG ) => {
 
-  const preload = _ => {
+//Set as null, will be set in a later step.
+	Game.hero = null;
+	Game.platformsGroup = null;
+	Game.cursors = null;
 
+  const preload = _ => {
+	game.load.atlasJSONHash(
+      CFG.ASSETS.GFX, 
+      CFG.ASSETS.ATLAS_PNG_PATH, 
+      CFG.ASSETS.ATLAS_JSON_PATH
+    );
   };
 
   const create = _ => {
