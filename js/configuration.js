@@ -1,6 +1,5 @@
 (Game => {
   // get or create our Game module
-  //Note: If statement creates a game container if ther is not one already.
   if( Game === undefined ){
     Game = window.Game = {};
   }

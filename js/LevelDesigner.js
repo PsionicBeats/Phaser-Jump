@@ -160,7 +160,7 @@ _____@__________              |
                               |
 ------------------------------|` // level 1
   };
-  
+
   const spawnPlatform = (game, x, y, size) => {
     x *= COL_WIDTH;
     y *= ROW_HEIGHT;
@@ -237,4 +237,3 @@ _____@__________              |
   };
 
 })(window.Phaser, window.Game, window.Game.Configuration);
-
