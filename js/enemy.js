@@ -1,9 +1,12 @@
 ((Phaser, Game, CFG) => {
-  if(Game === undefined){
+  // get or create Game module
+  if( Game === undefined ){
     Game = window.Game = {};
   }
 
   const SCALE = 1;
+  // const MOVE_SPEED = 850;
+  // const JUMP_VELOCITY = 2950; // also height, gravity:9750 jumpVel:2950 = can clear 400px
 
   Game.Enemy = class{
     constructor(game, x, y, spriteLabel){
@@ -23,6 +26,7 @@
 
     update(){
       let hitPlatform = this.game.physics.arcade.collide(this.sprite, Game.platformsGroup);
+      // let jumping = this.sprite.body.velocity.y !== 0;
 
       // wrap around stage
       if(this.sprite.x > CFG.GAME_WIDTH){

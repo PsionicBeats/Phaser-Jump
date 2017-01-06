@@ -1,6 +1,7 @@
 (( Phaser, Game, CFG ) => {
   Game.hero = null;
   Game.platformsGroup = null;
+  Game.enemiesGroup = null;
   Game.cursors = null;
 
   const preload = _ => {
@@ -12,7 +13,8 @@
     game.physics.arcade.gravity.y = CFG.GRAVITY;
     game.stage.backgroundColor = CFG.BG_COLOR;
 
-    Game.cursors = game.input.keyboard.createCursorKeys();
+    // keep track of enemies
+    Game.enemiesGroup = game.add.group();
 
     // add some platforms
     Game.platformsGroup = game.add.group();
@@ -23,6 +25,10 @@
 
     Game.hero = new Game.Hero(game, 500, CFG.GAME_HEIGHT - 200);
     game.camera.follow(Game.hero.sprite, null, CFG.CAMERA_LERP, CFG.CAMERA_LERP);
+
+    Game.cursors = game.input.keyboard.createCursorKeys();
+    Game.cursors.fire = game.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+    Game.cursors.fire.onUp.add( Game.hero.handleFire.bind(Game.hero) );
 
   };
 

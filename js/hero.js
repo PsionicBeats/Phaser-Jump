@@ -1,13 +1,12 @@
 ((Phaser, Game, CFG) => {
-
+  // get or create Game module
   if( Game === undefined ){
     Game = window.Game = {};
   }
 
   const SCALE = 1;
   const MOVE_SPEED = 850;
-  const JUMP_VELOCITY = 2950;
-  // also height, gravity:9750 jumpVel:2950 = can clear 400px
+  const JUMP_VELOCITY = 2950; // also height, gravity:9750 jumpVel:2950 = can clear 400px
   const ANIMATIONS = {
     IDLE_SPEED : 8,
     LEFT_SPEED : 8,
@@ -15,9 +14,17 @@
     JUMP_SPEED : 4,
   };
 
+  const PELLET_SPEED = 10;
+  const FACING = {
+    LEFT : 'LEFT',
+    RIGHT : 'RIGHT'
+  };
+
   Game.Hero = class{
     constructor(game, x, y){
       this.game = game;
+      this.ammo = [];
+      this.facing = FACING.RIGHT;
       this.sprite = this.game.add.sprite(x, y, CFG.ASSETS.GFX);
       this.sprite.scale.set(SCALE);
       this.game.physics.enable(this.sprite, Phaser.Physics.ARCADE);
@@ -30,6 +37,7 @@
       };
 
       // allows passing through platforms
+      // #TODO this will be bad for checking other objects though
       this.sprite.body.checkCollision.up =
       this.sprite.body.checkCollision.left =
       this.sprite.body.checkCollision.right = false;
@@ -47,11 +55,13 @@
         if(!jumping && this.sprite.animations.currentAnim !== this.animations.left){
           this.animations.left.play(ANIMATIONS.LEFT_SPEED, true);
         }
+        this.facing = FACING.LEFT;
       } else if (Game.cursors.right.isDown) {
         this.sprite.body.velocity.x = MOVE_SPEED;
         if(!jumping && this.sprite.animations.currentAnim !== this.animations.right){
           this.animations.right.play(ANIMATIONS.RIGHT_SPEED, true);
         }
+        this.facing = FACING.RIGHT;
       } else if(!jumping){
         //  Stand still
         if(this.sprite.animations.currentAnim !== this.animations.idle){
@@ -73,6 +83,25 @@
         this.sprite.x = -this.sprite.width;
       } else if(this.sprite.x < -this.sprite.width){
         this.sprite.x = CFG.GAME_WIDTH;
+      }
+
+    }
+
+    collect(item){
+      if( item instanceof Game.Ammo ){
+        this.ammo.push(item);
+      } else {
+        throw TypeError(`Cannot collect unknown type: ${ item }`);
+      }
+    }
+
+    handleFire(){
+      if(this.ammo.length > 0){
+        let pellet = this.ammo.pop();
+        pellet.sprite.fixedToCamera = false;
+        pellet.sprite.x = this.sprite.x;
+        pellet.sprite.y = this.sprite.y;
+        pellet.vx = this.facing === FACING.LEFT ? -PELLET_SPEED : PELLET_SPEED;
       }
     }
   };

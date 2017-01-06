@@ -1,6 +1,6 @@
 ((Phaser, Game, CFG) => {
-
-  if(Game === undefined){
+  // get or create Game module
+  if( Game === undefined ){
     Game = window.Game = {};
   }
 
@@ -13,6 +13,7 @@
   };
 
   Game.Platform = class{
+
     /*
      * y is the height from the BOTTOM of the stage
      * only the top edge should be collidable
